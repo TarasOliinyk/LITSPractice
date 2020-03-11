@@ -1,0 +1,63 @@
+- 1. DCL​(Data Control Language). Створити декілька юзерів, розподілити для них різні ролі
+- 2. В якому порядку виконуються дії в SELECT query
+- 3. Створити 3 таблиці,
+- a. 1. Студенти, 2. Предмети, 3. Бали(в табличці бали має бути по 4 оціник для кожного предмету, юзера).
+- b. Отримати бали кожного студента по кожному предмету
+- c. Знайти студентів і предмети з балом більшим ніж 80
+- d. Вивести середній бал кожного студента
+- e. Знайти студентів з середнім балом вищим ніж 71
+- f. Додати foreign key для таблиць
+
+---------------------------------------------------------------------------------
+1. 
+> Create three users:
+CREATE USER userA@localhost IDENTIFIED BY 'passA';
+CREATE USER userB@localhost IDENTIFIED BY 'passB';
+CREATE USER userC@localhost IDENTIFIED BY 'passC';
+> View permissions of the newly created users:
+SHOW GRANTS FOR userA@localhost;
+SHOW GRANTS FOR userB@localhost;
+SHOW GRANTS FOR userC@localhost;
+> Change permissions for the users:
+GRANT SELECT ON lits.* TO userA@localhost;
+GRANT INSERT ON lits.* TO userB@localhost;
+GRANT ALL PRIVILEGES ON lits.* TO userC@localhost;
+> View the updated permissions:
+SHOW GRANTS FOR userA@localhost;
+SHOW GRANTS FOR userB@localhost;
+SHOW GRANTS FOR userC@localhost;
+
+2.
+Order of actions in the SELECT query:
+- FROM
+- WHERE
+- GROUP BY
+- HAVING
+- SELECT
+- ORDER BY
+
+3. Create three tables: 'students', 'subjects', 'marks';
+> Create a database for the tables:
+CREATE DATABASE students_data;
+> Switch to the database:
+USE students_data;
+> Create 'students' table:
+CREATE TABLE students (student_id INT(11) NOT NULL AUTO_INCREMENT, first_name VARCHAR(20) NOT NULL, last_name VARCHAR(20) NOT NULL, PRIMARY KEY (student_id));
+> Create 'subjects' table:
+CREATE TABLE subjects (subject_id INT(11) NOT NULL AUTO_INCREMENT, subject_title VARCHAR(20) NOT NULL, PRIMARY KEY (subject_id));
+> Create 'marks' table:
+CREATE TABLE marks (mark_id INT(11) NOT NULL AUTO_INCREMENT, subject_id INT(11) NOT NULL, student_id INT(11) NOT NULL, mark INT(3), PRIMARY KEY (mark_id));
+> Populate tables with data:
+INSERT INTO students (first_name, last_name) VALUES ('Cassius', 'CLay'); ...
+INSERT INTO subjects (subject_title) VALUES ('Math'); ...
+INSERT INTO marks (subject_id, student_id, mark) VALUES (1, 5, 58); ...
+> Get mark of each student in each subject(task 3.b):
+SELECT st.first_name, st.last_name, sb.subject_title, m.mark FROM students st, subjects sb, marks m WHERE st.student_id = m.student_id AND m.subject_id = sb.subject_id;
+> Get studnets and subjects where mark is greater than 80 (task 3.c):
+SELECT st.first_name, st.last_name, sb.subject_title, m.mark FROM students st, subjects sb, marks m WHERE st.student_id = m.student_id AND m.subject_id = sb.subject_id AND m.mark > 80;
+> Get average mark of each student (task 3.d):
+SELECT st.first_name, st.last_name, AVG(m.mark) FROM students st, subjects sb, marks m WHERE st.student_id = m.student_id GROUP BY st.first_name;
+> Get students with average mark greater than 71 (task 3.e):
+SELECT avg_results.first_name, avg_results.last_name, avg_results.average_mark FROM (SELECT st.first_name, st.last_name, AVG(m.mark) AS average_mark FROM students st, subjects sb, marks m WHERE st.student_id = m.student_id GROUP BY st.first_name) AS avg_results WHERE avg_results.average_mark > 71;
+> Set foreign key for the tables (task 3.f):
+ALTER TABLE marks ADD FOREIGN KEY (subject_id) REFERENCES subjects(subject_id);
