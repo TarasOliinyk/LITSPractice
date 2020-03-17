@@ -28,7 +28,7 @@ public class DBConnectionUtil {
         Connection connection = null;
         String connectionURL = "jdbc:mysql://localhost:3306/students_data";
         String username = "root";
-        String password = "Mypass@123";
+        String password = ""; // ToDo: TBD
         loadDatabaseDriver("com.mysql.jdbc.Driver");
 
         try {
