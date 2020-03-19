@@ -1,0 +1,20 @@
+<?xml version = "1.0"?>
+<students>
+   <student id = "1">
+      <firstName>Tom</firstName>
+      <lastName>Hanks</lastName>
+      <mark>85</mark>
+   </student>
+
+   <student id = "2">
+      <firstName>John</firstName>
+      <lastName>Travolta</lastName>
+      <mark>95</mark>
+   </student>
+
+   <student id = "3">
+      <firstName>Bruce</firstName>
+      <lastName>Willis</lastName>
+      <mark>90</mark>
+   </student>
+</students>
